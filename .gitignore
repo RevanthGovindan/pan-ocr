@@ -1,0 +1,6 @@
+dataset/
+runs/
+test_images/
+*.pt
+.venv/
+.DS_store
