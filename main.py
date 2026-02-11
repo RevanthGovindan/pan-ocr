@@ -9,7 +9,7 @@ warnings.filterwarnings("ignore")
 model = YOLO("runs/detect/train/weights/best.pt")
 
 # Read image
-img_path = "test_images/pan.jpg"
+img_path = "test_images/ranjith.jpeg"
 img = cv2.imread(img_path)
 
 # Run detection
@@ -29,16 +29,20 @@ gray = cv2.cvtColor(pan_crop, cv2.COLOR_BGR2GRAY)
 clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))
 contrast = clahe.apply(gray)
 
-thresh = cv2.adaptiveThreshold(
-    contrast,
+blur = cv2.GaussianBlur(contrast, (3, 3), 0)
+
+# Otsu Thresholding
+_, thresh = cv2.threshold(
+    blur,
+    0,
     255,
-    cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
-    cv2.THRESH_BINARY,
-    31,
-    2
+    cv2.THRESH_BINARY + cv2.THRESH_OTSU
 )
 
-reader = easyocr.Reader(['en'], gpu=False)
+reader = easyocr.Reader(['en'], gpu=True)
+
+cv2.imshow("grey",thresh)
+cv2.waitKey(0)
 
 result = reader.readtext(thresh)
 
