@@ -4,3 +4,4 @@ test_images/
 *.pt
 .venv/
 .DS_store
+__pycache__
